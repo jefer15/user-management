@@ -1,0 +1,22 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.useros
+*.sln.docstates
+*dbmdl
+
+# Archivos de build y paquetes de NuGet
+bin/
+obj/
+
+# Archivos de la solución de Visual Studio
+*.sln
+
+# Otros archivos de VS
+*.pdb
+*.pfx
+*.publishsettings
+
+# Archivos temporales y de log
+*.log
