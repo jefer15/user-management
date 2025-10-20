@@ -1,0 +1,53 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Crear Usuario</title>
+</head>
+<body>
+    <h2>Crear Usuario</h2>
+    <form id="formCreate">
+        <label>Nombre:</label><br />
+        <input type="text" id="name" maxlength="100" required /><br />
+
+        <label>Fecha de nacimiento:</label><br />
+        <input type="date" id="birthDate" required /><br />
+
+        <label>Sexo:</label><br />
+        <select id="gender" required>
+            <option value="">Seleccione...</option>
+            <option value="M">M</option>
+            <option value="F">F</option>
+        </select><br /><br />
+
+        <button type="submit">Guardar</button>
+    </form>
+
+    <div id="message"></div>
+
+    <script>
+        const apiBase = 'http://localhost:8080/api/users';
+
+        document.getElementById('formCreate').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const payload = {
+                name: document.getElementById('name').value,
+                birthDate: document.getElementById('birthDate').value,
+                gender: document.getElementById('gender').value
+            };
+
+            const res = await fetch(apiBase, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            document.getElementById('message').innerText =
+                res.ok ? 'Usuario creado correctamente' : 'Error al crear usuario';
+        });
+    </script>
+</body>
+</html>

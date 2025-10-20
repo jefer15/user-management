@@ -1,0 +1,41 @@
+services:
+  api:
+    build:
+      context: ./UserManagement
+      dockerfile: UserManagement.Api/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sqlserver
+    networks:
+      - usermanagement_net
+
+  web:
+    build:
+      context: ./UserManagement
+      dockerfile: UserManagement.Web/Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - api
+    networks:
+      - usermanagement_net
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: usermanagement_db
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+    networks:
+      - usermanagement_net
+
+networks:
+  usermanagement_net:
+
+volumes:
+  sql_data:
