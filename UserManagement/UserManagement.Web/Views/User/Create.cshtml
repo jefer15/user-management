@@ -2,31 +2,98 @@
     Layout = null;
 }
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <title>Crear Usuario</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #0078D7, #00B4D8);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            width: 360px;
+            text-align: center;
+        }
+        h2 {
+            color: #0078D7;
+            margin-bottom: 1.5rem;
+        }
+        label {
+            font-weight: 600;
+            display: block;
+            text-align: left;
+            margin-bottom: 4px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px 10px;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #0078D7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #005fa3;
+        }
+        #message {
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        a {
+            display: inline-block;
+            margin-top: 1.2rem;
+            color: #0078D7;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h2>Crear Usuario</h2>
-    <form id="formCreate">
-        <label>Nombre:</label><br />
-        <input type="text" id="name" maxlength="100" required /><br />
+    <div class="card">
+        <h2>Crear Usuario</h2>
+        <form id="formCreate">
+            <label>Nombre:</label>
+            <input type="text" id="name" maxlength="100" required />
 
-        <label>Fecha de nacimiento:</label><br />
-        <input type="date" id="birthDate" required /><br />
+            <label>Fecha de nacimiento:</label>
+            <input type="date" id="birthDate" required />
 
-        <label>Sexo:</label><br />
-        <select id="gender" required>
-            <option value="">Seleccione...</option>
-            <option value="M">M</option>
-            <option value="F">F</option>
-        </select><br /><br />
+            <label>Sexo:</label>
+            <select id="gender" required>
+                <option value="">Seleccione...</option>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+            </select>
 
-        <button type="submit">Guardar</button>
-    </form>
-
-    <div id="message"></div>
+            <button type="submit">Guardar</button>
+        </form>
+        <div id="message"></div>
+        <a href="/User/Manage">Ver usuarios registrados →</a>
+    </div>
 
     <script>
         const apiBase = 'http://localhost:8080/api/users';
@@ -34,7 +101,7 @@
         document.getElementById('formCreate').addEventListener('submit', async (e) => {
             e.preventDefault();
             const payload = {
-                name: document.getElementById('name').value,
+                name: document.getElementById('name').value.trim(),
                 birthDate: document.getElementById('birthDate').value,
                 gender: document.getElementById('gender').value
             };
@@ -45,8 +112,15 @@
                 body: JSON.stringify(payload)
             });
 
-            document.getElementById('message').innerText =
-                res.ok ? 'Usuario creado correctamente' : 'Error al crear usuario';
+            const message = document.getElementById('message');
+            if (res.ok) {
+                message.style.color = 'green';
+                message.innerText = '✅ Usuario creado correctamente';
+                e.target.reset();
+            } else {
+                message.style.color = 'red';
+                message.innerText = '❌ Error al crear usuario';
+            }
         });
     </script>
 </body>
